@@ -1,0 +1,80 @@
+scope: postgres-cluster
+namespace: /db/
+name: pg-node1
+
+restapi:
+listen: 192.168.56.102:8008
+connect_address: 192.168.56.102:8008
+
+etcd3:
+hosts:
+- 192.168.56.102:2379
+- 192.168.56.103:2379
+- 192.168.56.104:2379
+
+bootstrap:
+dcs:
+ttl: 30
+loop_wait: 10
+retry_timeout: 10
+maximum_lag_on_failover: 1048576
+
+```
+postgresql:
+  use_pg_rewind: true
+
+  parameters:
+    wal_level: replica
+    hot_standby: "on"
+    max_connections: 100
+    max_wal_senders: 10
+    max_replication_slots: 10
+    wal_keep_size: 128MB
+```
+
+initdb:
+- encoding: UTF8
+- data-checksums
+
+pg_hba:
+- host replication replicator 192.168.56.0/24 scram-sha-256
+- host all all 192.168.56.0/24 scram-sha-256
+
+users:
+admin:
+password: CHANGE_ME_ADMIN_PASSWORD
+options:
+- createrole
+- createdb
+
+postgresql:
+listen: 192.168.56.102:5432
+connect_address: 192.168.56.102:5432
+
+data_dir: /var/lib/pgsql/16/data
+bin_dir: /usr/pgsql-16/bin
+
+pgpass: /tmp/pgpass
+
+authentication:
+replication:
+username: replicator
+password: CHANGE_ME_REPLICATION_PASSWORD
+
+```
+superuser:
+  username: postgres
+  password: CHANGE_ME_SUPERUSER_PASSWORD
+```
+
+parameters:
+unix_socket_directories: '.'
+
+tags:
+nofailover: false
+noloadbalance: false
+clonefrom: false
+nosync: false
+
+
+#For Node 2 and Node 3, change only the node-specific identity and IP addresses.
