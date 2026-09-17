@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PostgreSQL 16 Patroni High Availability Cluster
 
 Step-by-Step PostgreSQL High Availability Training Lab using:
@@ -233,3 +234,7 @@ FROM pg_stat_replication;
 ## License
 
 This project is intended for educational and training purposes.
+=======
+# postgresql-patroni-ha
+PostgreSQL Patroni HA Cluster
+>>>>>>> 2c4bcd77a61a2cebdbea82c277a98d4338959a6e
